@@ -12,8 +12,3 @@ Boulavogue
 ----------
 
 .. image:: abcfiles/Boulavogue.svg
-
-
-Unimplimented features
-----------------------
-
