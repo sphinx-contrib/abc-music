@@ -15,3 +15,6 @@ git co git@github.com:wxtim/abc-sphinx-extensions.git
 pip install -e .all
 ```
 
+# To use
+
+Add files with the extension ``.abc`` in source folder ``abcfiles``.
