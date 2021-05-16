@@ -20,6 +20,7 @@ jobs:
 
       - name: Install
         run: |
+          sudo apt install abcm2ps
           pip install .
 
       - name: Style
@@ -28,4 +29,4 @@ jobs:
 
       - name: Test
         run: |
-          pytest
+          pytest tests/
