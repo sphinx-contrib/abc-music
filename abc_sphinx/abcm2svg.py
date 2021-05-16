@@ -3,7 +3,6 @@ use in a sphinx doc.
 """
 
 import re
-import shutil
 
 from pathlib import Path
 from shlex import split
@@ -21,8 +20,8 @@ class abcm2psSubProcFailed(Exception):
 def check_shellprog(prog='abcm2ps -V'):
     """Check that abcm2ps is installed"""
     try:
-        abcm2ps = run(split(prog), capture_output=True)
-    except:
+        run(split(prog), capture_output=True)
+    except:   # noqa: E722
         raise DependencyMissingError(
             f'You need to have {prog} installed'
         )

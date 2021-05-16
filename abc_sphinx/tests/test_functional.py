@@ -13,7 +13,10 @@ from subprocess import run
 def make_html():
     """Run the documentation make"""
     makepath = Path(__file__).parent.parent.parent
-    cap = run(['make', 'html', f'--directory={str(makepath)}'], capture_output=True)
+    cap = run(
+        ['make', 'html', f'--directory={str(makepath)}'],
+        capture_output=True
+    )
     yield cap, makepath
 
 

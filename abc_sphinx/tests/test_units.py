@@ -11,12 +11,12 @@ from abc_sphinx.abcm2svg import (
     DependencyMissingError,
     rm_title,
     convert_abcfile,
-    abcm2psSubProcFailed,
     abc_wrangler
 )
 
 
-@pytest.mark.parametrize('script',
+@pytest.mark.parametrize(
+    'script',
     ['improbably_script_name', 'exit 1']
 )
 def test_check_shellprog(caplog, script):
@@ -24,7 +24,8 @@ def test_check_shellprog(caplog, script):
         check_shellprog(script)
 
 
-@pytest.mark.parametrize('filecreate, fileclean',
+@pytest.mark.parametrize(
+    'filecreate, fileclean',
     [
         ('The Sloe.svg', 'The Sloe.svg'),
         ('The Sloe.abc', '_The Sloe.abc')
@@ -36,7 +37,7 @@ def test_clean_abcpath(tmp_path, filecreate, fileclean):
     filecreate.touch()
     fileclean.touch()
     clean_abcpath(filecreate)
-    assert (fileclean).is_file() == False
+    assert (fileclean).is_file() is False
 
 
 def test_rm_title(tmp_path):
@@ -65,10 +66,14 @@ R: waltz
 M: 3/4
 L: 1/8
 K: Dmaj
-D2|"C"G4 D2|"C"G4 Bd|"C"g4 "Em"f2|"F"eg3 e2|"C"d4 "A"e2|B4 GB|"Dm"A4 "D"G2|"F"E4 "G"D2|
-"C"G4 "C"D2|"C"G4 Bd|"C"g4 "Em"f2|"F"eg3 e2|"C"d4 e2|B G3 B2|"A"A4 "C"G2|"C"G4 "C"d2||
-"C"d4 B2|"B"d2 e2 f2|"Am"g4 f2|"F"eg3 e2|"C"d4 e2|B4 GB|"Dm"A4 "F"G2|"F"E4 "G"D2|
-"C"G4 D2|"C"G4 Bd|"C"g4 "Em"f2|"F"eg3 e2|"C"d4 e2|B G3 B|"Dm"A4 "C"G2|"C"G4|| 
+D2|"C"G4 D2|"C"G4 Bd|"C"g4 "Em"f2|"F"eg3 e2|"C"d4 "A"e2|
+B4 GB|"Dm"A4 "D"G2|"F"E4 "G"D2|
+"C"G4 "C"D2|"C"G4 Bd|"C"g4 "Em"f2|"F"eg3 e2|"C"d4 e2|
+B G3 B2|"A"A4 "C"G2|"C"G4 "C"d2||
+"C"d4 B2|"B"d2 e2 f2|"Am"g4 f2|"F"eg3 e2|"C"d4 e2|B4 GB|
+"Dm"A4 "F"G2|"F"E4 "G"D2|
+"C"G4 D2|"C"G4 Bd|"C"g4 "Em"f2|"F"eg3 e2|"C"d4 e2|B G3 B|
+"Dm"A4 "C"G2|"C"G4||
     """)
     convert_abcfile(abcfile)
     assert (tmp_path / 'Water of Teign.svg').is_file()
