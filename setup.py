@@ -28,6 +28,8 @@ setup(
     # long_description=open('README.rst', 'r').read(),
     install_requires=[
         'sphinx>=2.1',
+        'flake8'
+        'pytest'
     ],
     packages=find_namespace_packages(include=['abc_sphinx.*'])
 )
