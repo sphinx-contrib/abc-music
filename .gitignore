@@ -5,3 +5,5 @@ abc_sphinx_extensions.egg-info/
 __pycache__
 *.svg
 _*.abc
+.coverage
+htmlcov

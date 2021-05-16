@@ -10,7 +10,7 @@ from shlex import split
 from subprocess import run
 
 
-class DepencyMissingError(Exception):
+class DependencyMissingError(Exception):
     ...
 
 
@@ -18,11 +18,14 @@ class abcm2psSubProcFailed(Exception):
     ...
 
 
-def check_deps():
+def check_shellprog(prog='abcm2ps -V'):
     """Check that abcm2ps is installed"""
-    abcm2ps = run(split('abcm2ps -V'), capture_output=True)
-    if abcm2ps.returncode != 0:
-        raise DepencyMissingError('You need to have abcm2ps installed')
+    try:
+        abcm2ps = run(split(prog), capture_output=True)
+    except:
+        raise DependencyMissingError(
+            f'You need to have {prog} installed'
+        )
 
 
 def clean_abcpath(abcpath):
@@ -41,44 +44,57 @@ def convert_abcfile(filename):
     """Find Convert ABC to svg for later use.
     """
     svgfile = filename.with_suffix('.svg')
-    if svgfile.is_file():
-        shutil.rmtree(svgfile)
 
     # Delete the title field from the files
-    text = filename.read_text().splitlines()
-    text = [line for line in text if not re.match('^T:', line)]
-    fname2 = filename.with_name(f'_{filename.name}')
-    fname2.write_text('\n'.join(text))
+    fname_notitle = rm_title(filename)
 
     # Run abcm2s as a subprocess:
     output = run(
         [
             'abcm2ps',
             '-g',   # Produce SVG output.
-            f'{str(fname2)}',
+            f'{str(fname_notitle)}',
             '-O',   # Output file.
-            f'{svgfile}'
+            f'{svgfile}',
         ],
         capture_output=True
     )
-    outfile = re.findall(r'written on (.*) \(', output.stdout.decode())[0]
-    Path(outfile).rename(svgfile)
-    if output.returncode != 0:
+    if output.returncode != 0:  # pragma: no cover
+        # Haven't been able to test this because almost
+        # no level of malformation seems to cause the wrapped
+        # script to fail.
         msg = (
             'ABCM2PS Failed because:\n'
             f'stdout\n------\n{output.stdout}\n\n'
             f'stderr\n------\n{output.stderr}\n'
         )
         raise abcm2psSubProcFailed(msg)
+    else:
+        outfile = re.findall(
+            r'written on (.*) \(', output.stdout.decode()
+        )[0]
+        Path(outfile).rename(svgfile)
+        return True
+
+
+def rm_title(filename):
+    """Remove title fields from an abcfile and write
+    the result to _{original_title}.abc
+    """
+    text = filename.read_text().splitlines()
+    text = [line for line in text if not re.match('^T:', line)]
+    fname_notitle = filename.with_name(f'_{filename.name}')
+    fname_notitle.write_text('\n'.join(text))
+    return fname_notitle
 
 
 def abc_wrangler(app):
-    check_deps()
+    check_shellprog()
     for abcpath in Path(app.srcdir).rglob('*.abc'):
         if not re.match('^_.*', abcpath.name):
             clean_abcpath(abcpath)
             convert_abcfile(abcpath)
 
 
-def setup(app):
+def setup(app):   # pragma: no cover
     app.connect('builder-inited', abc_wrangler)
