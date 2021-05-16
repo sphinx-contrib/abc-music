@@ -3,3 +3,5 @@ abc_sphinx.egg-info
 abc_sphinx_extensions.egg-info/
 *.pyc
 __pycache__
+*.svg
+_*.abc
