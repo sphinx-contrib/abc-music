@@ -1,13 +1,13 @@
-"""Convert abc files in ``source/_abcfiles`` making these available for
+"""Convert abc files in source to svg files making these available for
 use in a sphinx doc.
 """
+
+import re
+import shutil
 
 from pathlib import Path
 from shlex import split
 from subprocess import run
-
-import re
-import shutil
 
 
 class DepencyMissingError(Exception):
@@ -23,17 +23,6 @@ def check_deps():
     abcm2ps = run(split('abcm2ps -V'), capture_output=True)
     if abcm2ps.returncode != 0:
         raise DepencyMissingError('You need to have abcm2ps installed')
-
-
-def clean_abcdir(abcdir):
-    """Check file structure for use by the plugin.
-    """
-    for file_ in abcdir.rglob('*.svg'):
-        file_.unlink()
-    for file_ in abcdir.rglob('*.rst'):
-        file_.unlink()
-    for file_ in abcdir.rglob('_*'):
-        file_.unlink()
 
 
 def clean_abcpath(abcpath):
@@ -72,7 +61,7 @@ def convert_abcfile(filename):
         ],
         capture_output=True
     )
-    outfile = re.findall('written on (.*) \(', output.stdout.decode())[0]
+    outfile = re.findall(r'written on (.*) \(', output.stdout.decode())[0]
     Path(outfile).rename(svgfile)
     if output.returncode != 0:
         msg = (
