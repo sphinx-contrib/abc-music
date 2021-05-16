@@ -72,11 +72,6 @@ def convert_abcfile(filename):
         raise abcm2psSubProcFailed(msg)
 
 
-def write_index(categories):
-    for category in categories:
-        (Path().cwd() / f'source/{category}')
-
-
 def abc_wrangler(app):
     check_deps()
     for abcpath in Path(app.srcdir).rglob('*.abc'):
