@@ -11,4 +11,4 @@ abc source. For example:
 Boulavogue
 ----------
 
-.. image:: abcfiles/Boulavogue.svg
+.. image:: abcfiles/_Boulavogue.svg
