@@ -2,15 +2,12 @@
 use in a sphinx doc.
 """
 
-from docutils import nodes
 from pathlib import Path
-from shlex import shlex, split
+from shlex import split
 from subprocess import run
 
 import re
 import shutil
-
-from docutils.parsers.rst import Directive
 
 
 class DepencyMissingError(Exception):
@@ -37,6 +34,18 @@ def clean_abcdir(abcdir):
         file_.unlink()
     for file_ in abcdir.rglob('_*'):
         file_.unlink()
+
+
+def clean_abcpath(abcpath):
+    """clean up existing abc files
+    """
+    existing_files = [
+        abcpath.with_suffix('.svg'),
+        abcpath.parent / f'_{abcpath.name}'
+    ]
+    for file_ in existing_files:
+        if file_.is_file():
+            file_.unlink()
 
 
 def convert_abcfile(filename):
@@ -81,12 +90,10 @@ def write_index(categories):
 
 def abc_wrangler(app):
     check_deps()
-    for abcdir in Path(app.srcdir).rglob('abcfiles'):
-        clean_abcdir(abcdir)
-        destdir = Path(app.outdir) / 'abcfiles'
-        clean_abcdir(destdir)
-        for abcfile in abcdir.rglob('*.abc'):
-            convert_abcfile(abcfile)
+    for abcpath in Path(app.srcdir).rglob('*.abc'):
+        if not re.match('^_.*', abcpath.name):
+            clean_abcpath(abcpath)
+            convert_abcfile(abcpath)
 
 
 def setup(app):
