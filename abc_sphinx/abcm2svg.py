@@ -43,38 +43,39 @@ def clean_abcpath(abcpath):
 def convert_abcfile(filename):
     """Find Convert ABC to svg for later use.
     """
-    svgfile = filename.with_suffix('.svg')
-
     # Delete the title field from the files
     fname_notitle = rm_title(filename)
+    fnames = [filename, fname_notitle]
+    for fname in fnames:
+        svgfile = fname.with_suffix('.svg')
 
-    # Run abcm2s as a subprocess:
-    output = run(
-        [
-            'abcm2ps',
-            '-g',   # Produce SVG output.
-            f'{str(fname_notitle)}',
-            '-O',   # Output file.
-            f'{svgfile}',
-        ],
-        capture_output=True
-    )
-    if output.returncode != 0:  # pragma: no cover
-        # Haven't been able to test this because almost
-        # no level of malformation seems to cause the wrapped
-        # script to fail.
-        msg = (
-            'ABCM2PS Failed because:\n'
-            f'stdout\n------\n{output.stdout}\n\n'
-            f'stderr\n------\n{output.stderr}\n'
+        # Run abcm2s as a subprocess:
+        output = run(
+            [
+                'abcm2ps',
+                '-g',   # Produce SVG output.
+                f'{str(fname)}',
+                '-O',   # Output file.
+                f'{svgfile}',
+            ],
+            capture_output=True
         )
-        raise abcm2psSubProcFailed(msg)
-    else:
-        outfile = re.findall(
-            r'written on (.*) \(', output.stdout.decode()
-        )[0]
-        Path(outfile).rename(svgfile)
-        return True
+        if output.returncode != 0:  # pragma: no cover
+            # Haven't been able to test this because almost
+            # no level of malformation seems to cause the wrapped
+            # script to fail.
+            msg = (
+                'ABCM2PS Failed because:\n'
+                f'stdout\n------\n{output.stdout}\n\n'
+                f'stderr\n------\n{output.stderr}\n'
+            )
+            raise abcm2psSubProcFailed(msg)
+        else:
+            outfile = re.findall(
+                r'written on (.*) \(', output.stdout.decode()
+            )[0]
+            Path(outfile).rename(svgfile)
+    return True
 
 
 def rm_title(filename):
