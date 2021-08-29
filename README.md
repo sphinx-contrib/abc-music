@@ -1,6 +1,6 @@
 # ABC-Sphinx-Extension
 
-A sphinx extension to convert abc files into svg
+A sphinx extension to convert [abc music notation](https://abcnotation.com/) files into svg
 images for use in a Sphinx document.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
