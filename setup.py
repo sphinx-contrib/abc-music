@@ -31,5 +31,5 @@ setup(
         'flake8',
         'pytest'
     ],
-    packages=find_namespace_packages(include=['abc_sphinx.*'])
+    packages=find_namespace_packages(include=['abc_sphinx*'])
 )
