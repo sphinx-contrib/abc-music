@@ -6,7 +6,7 @@ images for use in a Sphinx document.
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
-It uses `abcm2ps <http://moinejf.free.fr/>`_,  to carry out the conversion.
+It uses [abcm2ps](<http://moinejf.free.fr/>),  to carry out the conversion.
 
 # To install
 
@@ -14,7 +14,7 @@ It uses `abcm2ps <http://moinejf.free.fr/>`_,  to carry out the conversion.
 
 ```bash
 git co git@github.com:wxtim/abc-sphinx-extensions.git
-pip install -e .
+pip install .
 ```
 
 ### From PyPi
