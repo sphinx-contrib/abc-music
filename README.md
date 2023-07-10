@@ -10,6 +10,10 @@ It uses [abcm2ps](<http://moinejf.free.fr/>),  to carry out the conversion.
 
 # To install
 
+### Manual Dependency
+
+You will need to have [abcm2ps](https://github.com/lewdlime/abcm2ps) installed on your system.
+
 ### From source
 
 ```bash
